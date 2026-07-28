@@ -1,0 +1,132 @@
+{
+  "meta": {
+    "name": "automatic sorting",
+    "type": "plc-project"
+  },
+  "data": {
+    "dataTypes": [],
+    "pous": [],
+    "configuration": {
+      "resource": {
+        "tasks": [
+          {
+            "name": "task0",
+            "triggering": "Cyclic",
+            "interval": "T#20ms",
+            "priority": 1
+          }
+        ],
+        "instances": [
+          {
+            "name": "instance0",
+            "task": "task0",
+            "program": "main"
+          }
+        ],
+        "globalVariables": [
+          {
+            "name": "START_PB",
+            "type": {
+              "definition": "base-type",
+              "value": "BOOL"
+            },
+            "location": "%IX0.0",
+            "documentation": "",
+            "debug": false
+          },
+          {
+            "name": "STOP_PB",
+            "type": {
+              "definition": "base-type",
+              "value": "BOOL"
+            },
+            "location": "%IX0.1",
+            "documentation": "",
+            "debug": false
+          },
+          {
+            "name": "E_STOP",
+            "type": {
+              "definition": "base-type",
+              "value": "BOOL"
+            },
+            "location": "%IX0.2",
+            "documentation": "",
+            "debug": false
+          },
+          {
+            "name": "ENTRY_SEN",
+            "type": {
+              "definition": "base-type",
+              "value": "BOOL"
+            },
+            "location": "%IX0.3",
+            "documentation": "",
+            "debug": false
+          },
+          {
+            "name": "VISION_REJECT_FLAG",
+            "type": {
+              "definition": "base-type",
+              "value": "BOOL"
+            },
+            "location": "%IX0.5",
+            "documentation": "",
+            "debug": false
+          },
+          {
+            "name": "EXIT_SEN",
+            "type": {
+              "definition": "base-type",
+              "value": "BOOL"
+            },
+            "location": "%IX0.6",
+            "documentation": "",
+            "debug": false
+          },
+          {
+            "name": "CONV_MOTOR",
+            "type": {
+              "definition": "base-type",
+              "value": "BOOL"
+            },
+            "location": "%QX0.0",
+            "documentation": "",
+            "debug": false
+          },
+          {
+            "name": "REJECT_SOL",
+            "type": {
+              "definition": "base-type",
+              "value": "BOOL"
+            },
+            "location": "%QX0.1",
+            "documentation": "",
+            "debug": false
+          },
+          {
+            "name": "FAULT_LAMP",
+            "type": {
+              "definition": "base-type",
+              "value": "BOOL"
+            },
+            "location": "%QX0.2",
+            "documentation": "",
+            "debug": false
+          },
+          {
+            "name": "OBJ_PRESENT",
+            "type": {
+              "definition": "base-type",
+              "value": "BOOL"
+            },
+            "location": "",
+            "documentation": "",
+            "debug": false
+          }
+        ]
+      }
+    },
+    "libraries": []
+  }
+}

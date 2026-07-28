@@ -1,0 +1,258 @@
+{
+  "name": "factory io",
+  "protocol": "modbus-tcp",
+  "modbusTcpConfig": {
+    "host": "127.0.0.1",
+    "port": 503,
+    "timeout": 1000,
+    "slaveId": 1,
+    "ioGroups": [
+      {
+        "id": "72ff2f57-e23d-4952-bc0c-b2068d5ed932",
+        "name": "SENSOR_DIGITAL",
+        "functionCode": "2",
+        "cycleTime": 100,
+        "offset": "0",
+        "length": 16,
+        "errorHandling": "keep-last-value",
+        "ioPoints": [
+          {
+            "id": "SENSOR_DIGITAL_0",
+            "name": "SENSOR_DIGITAL_0",
+            "type": "Digital Input (Discrete Input)",
+            "iecLocation": "%IX0.0",
+            "alias": ""
+          },
+          {
+            "id": "SENSOR_DIGITAL_1",
+            "name": "SENSOR_DIGITAL_1",
+            "type": "Digital Input (Discrete Input)",
+            "iecLocation": "%IX0.1",
+            "alias": ""
+          },
+          {
+            "id": "SENSOR_DIGITAL_2",
+            "name": "SENSOR_DIGITAL_2",
+            "type": "Digital Input (Discrete Input)",
+            "iecLocation": "%IX0.2",
+            "alias": ""
+          },
+          {
+            "id": "SENSOR_DIGITAL_3",
+            "name": "SENSOR_DIGITAL_3",
+            "type": "Digital Input (Discrete Input)",
+            "iecLocation": "%IX0.3",
+            "alias": "ENTRY_SEN"
+          },
+          {
+            "id": "SENSOR_DIGITAL_4",
+            "name": "SENSOR_DIGITAL_4",
+            "type": "Digital Input (Discrete Input)",
+            "iecLocation": "%IX0.4",
+            "alias": ""
+          },
+          {
+            "id": "SENSOR_DIGITAL_5",
+            "name": "SENSOR_DIGITAL_5",
+            "type": "Digital Input (Discrete Input)",
+            "iecLocation": "%IX0.5",
+            "alias": ""
+          },
+          {
+            "id": "SENSOR_DIGITAL_6",
+            "name": "SENSOR_DIGITAL_6",
+            "type": "Digital Input (Discrete Input)",
+            "iecLocation": "%IX0.6",
+            "alias": ""
+          },
+          {
+            "id": "SENSOR_DIGITAL_7",
+            "name": "SENSOR_DIGITAL_7",
+            "type": "Digital Input (Discrete Input)",
+            "iecLocation": "%IX0.7",
+            "alias": ""
+          },
+          {
+            "id": "SENSOR_DIGITAL_8",
+            "name": "SENSOR_DIGITAL_8",
+            "type": "Digital Input (Discrete Input)",
+            "iecLocation": "%IX1.0",
+            "alias": ""
+          },
+          {
+            "id": "SENSOR_DIGITAL_9",
+            "name": "SENSOR_DIGITAL_9",
+            "type": "Digital Input (Discrete Input)",
+            "iecLocation": "%IX1.1",
+            "alias": ""
+          },
+          {
+            "id": "SENSOR_DIGITAL_10",
+            "name": "SENSOR_DIGITAL_10",
+            "type": "Digital Input (Discrete Input)",
+            "iecLocation": "%IX1.2",
+            "alias": ""
+          },
+          {
+            "id": "SENSOR_DIGITAL_11",
+            "name": "SENSOR_DIGITAL_11",
+            "type": "Digital Input (Discrete Input)",
+            "iecLocation": "%IX1.3",
+            "alias": ""
+          },
+          {
+            "id": "SENSOR_DIGITAL_12",
+            "name": "SENSOR_DIGITAL_12",
+            "type": "Digital Input (Discrete Input)",
+            "iecLocation": "%IX1.4",
+            "alias": ""
+          },
+          {
+            "id": "SENSOR_DIGITAL_13",
+            "name": "SENSOR_DIGITAL_13",
+            "type": "Digital Input (Discrete Input)",
+            "iecLocation": "%IX1.5",
+            "alias": ""
+          },
+          {
+            "id": "SENSOR_DIGITAL_14",
+            "name": "SENSOR_DIGITAL_14",
+            "type": "Digital Input (Discrete Input)",
+            "iecLocation": "%IX1.6",
+            "alias": ""
+          },
+          {
+            "id": "SENSOR_DIGITAL_15",
+            "name": "SENSOR_DIGITAL_15",
+            "type": "Digital Input (Discrete Input)",
+            "iecLocation": "%IX1.7",
+            "alias": ""
+          }
+        ]
+      },
+      {
+        "id": "84a9a55c-1c0e-4e9b-a8a4-f85cbd1c712d",
+        "name": "ACTUATOR_COIL",
+        "functionCode": "15",
+        "cycleTime": 100,
+        "offset": "0",
+        "length": 16,
+        "errorHandling": "keep-last-value",
+        "ioPoints": [
+          {
+            "id": "ACTUATOR_COIL_0",
+            "name": "ACTUATOR_COIL_0",
+            "type": "Digital Output (Multiple Coils)",
+            "iecLocation": "%QX0.0",
+            "alias": "CONVEYER_1"
+          },
+          {
+            "id": "ACTUATOR_COIL_1",
+            "name": "ACTUATOR_COIL_1",
+            "type": "Digital Output (Multiple Coils)",
+            "iecLocation": "%QX0.1",
+            "alias": "REJECT_SOL"
+          },
+          {
+            "id": "ACTUATOR_COIL_2",
+            "name": "ACTUATOR_COIL_2",
+            "type": "Digital Output (Multiple Coils)",
+            "iecLocation": "%QX0.2",
+            "alias": ""
+          },
+          {
+            "id": "ACTUATOR_COIL_3",
+            "name": "ACTUATOR_COIL_3",
+            "type": "Digital Output (Multiple Coils)",
+            "iecLocation": "%QX0.3",
+            "alias": ""
+          },
+          {
+            "id": "ACTUATOR_COIL_4",
+            "name": "ACTUATOR_COIL_4",
+            "type": "Digital Output (Multiple Coils)",
+            "iecLocation": "%QX0.4",
+            "alias": ""
+          },
+          {
+            "id": "ACTUATOR_COIL_5",
+            "name": "ACTUATOR_COIL_5",
+            "type": "Digital Output (Multiple Coils)",
+            "iecLocation": "%QX0.5",
+            "alias": "CONVEYER_2"
+          },
+          {
+            "id": "ACTUATOR_COIL_6",
+            "name": "ACTUATOR_COIL_6",
+            "type": "Digital Output (Multiple Coils)",
+            "iecLocation": "%QX0.6",
+            "alias": "CONVEYER_3"
+          },
+          {
+            "id": "ACTUATOR_COIL_7",
+            "name": "ACTUATOR_COIL_7",
+            "type": "Digital Output (Multiple Coils)",
+            "iecLocation": "%QX0.7",
+            "alias": ""
+          },
+          {
+            "id": "ACTUATOR_COIL_8",
+            "name": "ACTUATOR_COIL_8",
+            "type": "Digital Output (Multiple Coils)",
+            "iecLocation": "%QX1.0",
+            "alias": ""
+          },
+          {
+            "id": "ACTUATOR_COIL_9",
+            "name": "ACTUATOR_COIL_9",
+            "type": "Digital Output (Multiple Coils)",
+            "iecLocation": "%QX1.1",
+            "alias": ""
+          },
+          {
+            "id": "ACTUATOR_COIL_10",
+            "name": "ACTUATOR_COIL_10",
+            "type": "Digital Output (Multiple Coils)",
+            "iecLocation": "%QX1.2",
+            "alias": ""
+          },
+          {
+            "id": "ACTUATOR_COIL_11",
+            "name": "ACTUATOR_COIL_11",
+            "type": "Digital Output (Multiple Coils)",
+            "iecLocation": "%QX1.3",
+            "alias": ""
+          },
+          {
+            "id": "ACTUATOR_COIL_12",
+            "name": "ACTUATOR_COIL_12",
+            "type": "Digital Output (Multiple Coils)",
+            "iecLocation": "%QX1.4",
+            "alias": ""
+          },
+          {
+            "id": "ACTUATOR_COIL_13",
+            "name": "ACTUATOR_COIL_13",
+            "type": "Digital Output (Multiple Coils)",
+            "iecLocation": "%QX1.5",
+            "alias": ""
+          },
+          {
+            "id": "ACTUATOR_COIL_14",
+            "name": "ACTUATOR_COIL_14",
+            "type": "Digital Output (Multiple Coils)",
+            "iecLocation": "%QX1.6",
+            "alias": ""
+          },
+          {
+            "id": "ACTUATOR_COIL_15",
+            "name": "ACTUATOR_COIL_15",
+            "type": "Digital Output (Multiple Coils)",
+            "iecLocation": "%QX1.7",
+            "alias": ""
+          }
+        ]
+      }
+    ]
+  }
+}
