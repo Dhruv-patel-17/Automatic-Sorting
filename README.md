@@ -10,7 +10,9 @@
 
 ## Demo:
 
-<img width="800" alt="image" src="doc/demo.gif">
+<img width="800" alt="image" src="animation.gif">
+<img width="800" alt="image" src="sorting.gif">
+
 
 ## Introduction:
 VisionSort is a vision-guided industrial sorting system that combines computer vision with PLC-based control logic to automatically classify and sort two part types — **Lid** and **Base** — on a conveyor line. A live camera feed is analyzed in real time using contour detection and silhouette shape analysis, and the classification result is communicated to a soft-PLC (OpenPLC) over Modbus TCP, which drives the physical sorting mechanism (conveyor motor and reject pusher) on a simulated line built in Factory I/O. The system includes a fault-detection watchdog that lets the PLC independently detect if the vision system itself has failed, and a standalone analytics dashboard for reviewing sorting history. The project is built end-to-end from scratch — the ladder logic, the vision pipeline, and the Modbus integration between them — rather than relying on any single pre-built tool to do the work.
@@ -22,7 +24,7 @@ Traditional conveyor sorting relies on simple photoelectric sensors that can onl
 
 | Lid | Base |
 |---|---|
-| <img src="doc/lid_template.png" width="260"> | <img src="doc/base_template.png" width="260"> |
+| <img src="lid_template.png" width="260"> | <img src="base_template.png" width="260"> |
 | Simple rounded-square outline, nested concentric-ring surface pattern | Four L-shaped corner brackets with concave notches cut into the outline (a cross/bracket silhouette) |
 
 Both parts share the same color family and both have some rotational symmetry in their surface pattern — a combination that ruled out the two most obvious classification approaches (see **Design Decisions & Debugging Journey** below for why, and what was used instead).
