@@ -27,7 +27,7 @@ Traditional conveyor sorting relies on simple photoelectric sensors that can onl
 | <img src="lid_template.png" width="260"> | <img src="base_template.png" width="260"> |
 | Simple rounded-square outline, nested concentric-ring surface pattern | Four L-shaped corner brackets with concave notches cut into the outline (a cross/bracket silhouette) |
 
-Both parts share the same color family and both have some rotational symmetry in their surface pattern — a combination that ruled out the two most obvious classification approaches (see **Design Decisions & Debugging Journey** below for why, and what was used instead).
+Both parts share the same color family and both have some rotational symmetry in their surface pattern — a combination that ruled out the two most obvious classification approaches.
 
 ## System Pipeline
 <img width="650" alt="image" src="doc/pipeline.png">
@@ -87,21 +87,6 @@ The PLC's coil outputs drive a multi-segment conveyor belt, and its discrete inp
 ### 9. Analytics Dashboard
 Every classification event is logged to CSV (timestamp, object ID, classification, sort outcome) and reviewed in a standalone HTML dashboard: sort counts, pass/reject/unknown breakdown, a Lid/Base distribution chart, an animated conveyor replay of the actual sorted sequence, and a searchable log table.
 
-## Design Decisions & Debugging Journey
-
-This section exists because the path to a working classifier involved three failed approaches first — each failure was diagnostic, not wasted effort, and understanding *why* each one failed is arguably the most interview-relevant part of this project.
-
-**Attempt 1 — Color classification.** Rejected once real part images were available: both Lid and Base are the same green color family, and part colors vary across instances in the simulation. Color carried no reliable signal here.
-
-**Attempt 2 — ORB feature matching against reference templates.** Initially promising (matches were found), but produced a systematic bias: the Base template had roughly 3x more keypoints than the Lid template (280 vs 94), so raw match count always favored Base regardless of the real object. Normalizing by each template's own keypoint count flipped the bias the other way — Lid's concentric-ring pattern is radially symmetric, so it produced spurious "matches" against almost anything, since a ring looks similar at many rotations. Even RANSAC homography verification (which checks geometric consistency, not just raw overlap) didn't fully resolve this, because the ring pattern itself provides many self-consistent-looking alignments at the wrong rotation.
-
-**Attempt 3 (adopted) — Contour shape analysis.** Once it was clear both color and local-feature matching were the wrong tool for these specific symmetric, same-colored parts, the fix was to use a rotation-invariant *global* shape signal instead: solidity and convexity-defect count, derived from the object's outer silhouette. This sidesteps both prior failure modes entirely, since it depends on the overall outline shape, not local texture or color.
-
-**Detection: YOLO to contour detection.** Documented in the pipeline section above — YOLO's pretrained classes don't cover this synthetic object at all, so plain contour detection (which doesn't need to know what the object "is") was the correct fix once that was confirmed.
-
-**Fragmentation -> morphological closing.** A single physical object thresholding into multiple disconnected blobs was traced to the Base part's own concave design, and fixed with morphological closing — applied consistently in both the main detection loop and inside the shape-classification step, since using different kernel sizes in each risked either failing to merge fragments or erasing the genuine notches the classifier depends on.
-
-**PLC platform: OpenPLC, not Siemens TIA Portal.** TIA Portal requires either a paid license or a 21-day trial, and lab access wasn't reliably available. OpenPLC is free, open-source, and IEC 61131-3 compliant — the ladder logic (seal-in circuits, interlocks, timers) is functionally and structurally identical to what would be written in TIA Portal; only the addressing syntax and surrounding tool interface differ. This is stated plainly rather than implied, since overstating tool-specific experience is a bad trade for a project meant to demonstrate real understanding.
 
 ## Known Limitations
 
