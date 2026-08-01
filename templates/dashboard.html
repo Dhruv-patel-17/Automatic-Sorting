@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VisionSort — Sorting Overview</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --page: #eef0f4;
+      --card: #ffffff;
+      --ink: #14161c;
+      --ink-dim: #8a8f99;
+      --ink-faint: #b7bcc6;
+      --line: #eef0f3;
+
+      --purple-1: #6d3bf5;
+      --purple-2: #9b6bff;
+      --purple-dark-1: #241454;
+      --purple-dark-2: #4a2a9e;
+
+      --green-bg: #e2f8ec;
+      --green-ink: #1aa25a;
+      --red-bg: #fdeaea;
+      --red-ink: #e2483d;
+      --amber-bg: #fff2df;
+      --amber-ink: #d98c1f;
+      --black: #14161c;
+
+      --r-lg: 22px;
+      --r-md: 16px;
+      --r-sm: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--page);
+      color: var(--ink);
+      font-family: 'Inter', -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 240px 1fr 300px;
+      gap: 22px;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 26px;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: var(--card);
+      border-radius: var(--r-lg);
+      padding: 22px 18px;
+      display: flex;
+      flex-direction: column;
+      height: fit-content;
+      min-height: calc(100vh - 52px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 22px;
+      padding: 0 6px;
+    }
+
+    .brand .mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--purple-1), var(--purple-2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .brand .name {
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .search {
+      background: var(--page);
+      border-radius: var(--r-sm);
+      padding: 9px 12px;
+      font-size: 12.5px;
+      color: var(--ink-dim);
+      margin-bottom: 22px;
+    }
+
+    .nav-label {
+      font-size: 10px;
+      letter-spacing: .08em;
+      color: var(--ink-faint);
+      font-weight: 700;
+      padding: 0 10px;
+      margin: 14px 0 8px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: var(--r-sm);
+      font-size: 13px;
+      color: var(--ink-dim);
+      font-weight: 500;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .nav-item .ic {
+      width: 16px;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .nav-item.active {
+      background: #f2edff;
+      color: var(--purple-1);
+      font-weight: 600;
+    }
+
+    .nav-item.active::before {
+      content: '';
+      position: absolute;
+      left: -18px;
+      top: 8px;
+      bottom: 8px;
+      width: 3px;
+      background: var(--purple-1);
+      border-radius: 3px;
+    }
+
+    .nav-item:hover:not(.active) {
+      background: var(--page);
+    }
+
+    .nav-count {
+      margin-left: auto;
+      font-size: 10.5px;
+      color: var(--ink-faint);
+      background: var(--page);
+      padding: 1px 7px;
+      border-radius: 10px;
+    }
+
+    .sidebar-bottom {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .plc-card {
+      background: var(--page);
+      border-radius: var(--r-md);
+      padding: 16px;
+    }
+
+    .plc-card .row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11.5px;
+      color: var(--ink-dim);
+      padding: 5px 0;
+    }
+
+    .plc-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--ink-faint);
+    }
+
+    .plc-dot.on {
+      background: var(--green-ink);
+    }
+
+    .plc-dot.fault {
+      background: var(--red-ink);
+    }
+
+    .profile-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 4px 6px;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ffb46b, #ff7a7a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .profile-chip .pname {
+      font-size: 12.5px;
+      font-weight: 600;
+    }
+
+    .profile-chip .prole {
+      font-size: 10.5px;
+      color: var(--ink-dim);
+    }
+
+    /* Main */
+    .main {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .topbar .eyebrow {
+      font-size: 12px;
+      color: var(--ink-dim);
+      margin-bottom: 6px;
+    }
+
+    .topbar h1 {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .topbar-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .conn-pill {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 9px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .conn-pill .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--ink-faint);
+    }
+
+    .conn-pill.on .dot {
+      background: var(--green-ink);
+    }
+
+    .conn-pill.on {
+      color: var(--green-ink);
+    }
+
+    .btn-export {
+      background: var(--black);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--r-lg);
+      padding: 22px;
+    }
+
+    .balance-card .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .balance-card .label {
+      font-size: 12.5px;
+      color: var(--ink-dim);
+      margin-bottom: 8px;
+    }
+
+    .balance-card .big {
+      font-size: 34px;
+      font-weight: 800;
+    }
+
+    .pill {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .pill.green {
+      background: var(--green-bg);
+      color: var(--green-ink);
+    }
+
+    .pill.red {
+      background: var(--red-bg);
+      color: var(--red-ink);
+    }
+
+    .pill.amber {
+      background: var(--amber-bg);
+      color: var(--amber-ink);
+    }
+
+    .balance-card .sub {
+      font-size: 12px;
+      color: var(--ink-dim);
+      margin-top: 6px;
+    }
+
+    .chart-wrap {
+      margin-top: 14px;
+      height: 220px;
+    }
+
+    .sub-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+
+    .sub-stat {
+      padding: 0 16px;
+      border-right: 1px solid var(--line);
+    }
+
+    .sub-stat:last-child {
+      border-right: none;
+    }
+
+    .sub-stat .head {
+      font-size: 12px;
+      color: var(--ink-dim);
+      margin-bottom: 8px;
+    }
+
+    .sub-stat .amt {
+      font-size: 19px;
+      font-weight: 700;
+    }
+
+    .sub-stat .delta-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .sub-stat .from {
+      font-size: 10.5px;
+      color: var(--ink-faint);
+    }
+
+    .row-2 {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 20px;
+    }
+
+    .score-card {
+      background: linear-gradient(155deg, var(--purple-dark-2), var(--purple-dark-1) 70%);
+      border-radius: var(--r-lg);
+      padding: 24px;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 190px;
+    }
+
+    .score-card .label {
+      font-size: 12.5px;
+      opacity: .75;
+    }
+
+    .score-card .big {
+      font-size: 42px;
+      font-weight: 800;
+      margin-top: 10px;
+    }
+
+    .score-card .pill {
+      align-self: flex-start;
+      margin-top: 10px;
+    }
+
+    .table-card .thead-row,
+    .tx-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      font-size: 12.5px;
+      padding: 12px 4px;
+      align-items: center;
+    }
+
+    .table-card .thead-row {
+      color: var(--ink-faint);
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .tx-row {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .tx-row:last-child {
+      border-bottom: none;
+    }
+
+    .tx-obj {
+      font-weight: 600;
+    }
+
+    .status-pill {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      display: inline-block;
+    }
+
+    .status-pill.pass {
+      background: var(--green-bg);
+      color: var(--green-ink);
+    }
+
+    .status-pill.reject {
+      background: var(--red-bg);
+      color: var(--red-ink);
+    }
+
+    .status-pill.unknown {
+      background: var(--amber-bg);
+      color: var(--amber-ink);
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .card-subtitle {
+      font-size: 11.5px;
+      color: var(--ink-dim);
+      margin-bottom: 14px;
+    }
+
+    .tx-scroll {
+      max-height: 280px;
+      overflow-y: auto;
+    }
+
+    /* Right column */
+    .right-col {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .ring-card .head-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .ring-wrap {
+      position: relative;
+      width: 170px;
+      height: 170px;
+      margin: 0 auto 6px;
+    }
+
+    .ring-wrap svg {
+      transform: rotate(-90deg);
+    }
+
+    .ring-pct {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      font-weight: 800;
+    }
+
+    .ring-legend {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .ring-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12.5px;
+    }
+
+    .ring-legend-item .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+    }
+
+    .ring-legend-item .val {
+      margin-left: auto;
+      font-weight: 700;
+    }
+
+    .expenses-card .bar {
+      display: flex;
+      height: 14px;
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 14px 0;
+    }
+
+    .bar-seg {
+      height: 100%;
+    }
+
+    .expenses-legend {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .expenses-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11.5px;
+      color: var(--ink-dim);
+    }
+
+    .expenses-legend-item .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .expenses-legend-item b {
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .ai-card {
+      background: linear-gradient(160deg, var(--purple-dark-1), #0d0620 75%);
+      border-radius: var(--r-lg);
+      padding: 24px;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ai-card .arc {
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      border: 22px solid rgba(255, 255, 255, .06);
+    }
+
+    .ai-card .kicker {
+      font-size: 11px;
+      opacity: .65;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ai-card .headline {
+      font-size: 15px;
+      font-weight: 600;
+      margin: 10px 0 14px;
+      line-height: 1.5;
+    }
+
+    .ai-btn {
+      background: rgba(255, 255, 255, .1);
+      border: 1px solid rgba(255, 255, 255, .15);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 11px 14px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+  /* =========================================================
+   REALISTIC VISION SORT CONVEYOR
+   ========================================================= */
+
+.conveyor-scene {
+    height: 280px;
+    position: relative;
+    overflow: hidden;
+}
+
+.scene-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.scene-title {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.scene-status {
+    font-size: 10px;
+    color: var(--ink-dim);
+    margin-top: 3px;
+}
+
+.live-badge {
+    font-size: 9px;
+    font-weight: 800;
+    color: var(--green-ink);
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.live-badge span {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--green-ink);
+    animation: liveBlink 1s infinite;
+}
+
+
+/* FACTORY FLOOR */
+
+.factory-floor {
+    height: 165px;
+    display: flex;
+    align-items: center;
+    margin-top: 4px;
+}
+
+.entry-point {
+    width: 60px;
+    text-align: center;
+    z-index: 20;
+}
+
+.station-name {
+    font-size: 8px;
+    font-weight: 800;
+    color: var(--ink-dim);
+    letter-spacing: .08em;
+}
+
+.entry-sensor {
+    width: 12px;
+    height: 12px;
+    margin: 9px auto 5px;
+    border-radius: 50%;
+    background: #20b866;
+    box-shadow: 0 0 0 5px rgba(32,184,102,.12);
+}
+
+.entry-point small {
+    font-size: 8px;
+    color: var(--ink-faint);
+}
+
+
+/* SORTING FLOOR + STORAGE CONTAINERS */
+
+.conveyor-system {
+    flex: 1;
+    height: 165px;
+    position: relative;
+}
+
+/* DROP ZONE — where falling objects live while animating */
+
+.drop-zone {
+    position: absolute;
+    inset: 0;
+    z-index: 12;
+    pointer-events: none;
+}
+
+
+/* CONTAINERS ROW */
+
+.containers-row {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: flex-end;
+    z-index: 5;
+}
+
+.storage-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container-label {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: .06em;
+    color: var(--ink-dim);
+    margin-bottom: 6px;
+}
+
+.container-box {
+    position: relative;
+    width: 92px;
+    height: 74px;
+
+    border-radius: 6px 6px 15px 15px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #3d3e47 0%,
+            #24252d 45%,
+            #181920 100%
+        );
+
+    border: 2px solid #51525b;
+
+    box-shadow:
+        inset 0 8px 12px rgba(0,0,0,.35),
+        0 7px 12px rgba(0,0,0,.18);
+
+    overflow: hidden;
+
+    transition: box-shadow .2s ease;
+}
+
+.container-box::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 9px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,.16),
+            rgba(255,255,255,0)
+        );
+}
+
+.container-box.receiving {
+    box-shadow:
+        inset 0 8px 12px rgba(0,0,0,.35),
+        0 0 0 4px rgba(109,59,245,.28),
+        0 7px 12px rgba(0,0,0,.18);
+}
+
+.lid-container .container-box {
+    border-color: #5b35bd;
+}
+
+.base-container .container-box {
+    border-color: #9698a2;
+}
+
+.container-count {
+    margin-top: 7px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink);
+}
+
+
+/* OBJECT */
+
+.storage-object {
+    position: absolute;
+
+    width: 32px;
+    height: 32px;
+
+    z-index: 14;
+
+    transform-origin: center center;
+
+    box-shadow:
+        0 4px 7px rgba(0,0,0,.35);
+}
+
+
+/* BASE */
+
+.storage-object.base {
+    border-radius: 6px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #f4f4f6,
+            #bfc1c9
+        );
+
+    border: 2px solid #9698a2;
+}
+
+
+/* LID */
+
+.storage-object.lid {
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #c6a8ff,
+            #7748df 45%,
+            #30205f
+        );
+
+    border: 2px solid #5b35bd;
+}
+
+
+/* UNKNOWN */
+
+.storage-object.unknown {
+    border-radius: 5px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffd080,
+            #d98c1f
+        );
+}
+
+
+/* OBJECT LABEL */
+
+.object-tag {
+    position: absolute;
+
+    top: -18px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    white-space: nowrap;
+
+    padding: 2px 5px;
+
+    border-radius: 3px;
+
+    background: #14161c;
+
+    color: white;
+
+    font-size: 7px;
+
+    font-weight: 700;
+}
+
+
+/* CLASSIFICATION */
+
+.classification-bar {
+    border-top: 1px solid var(--line);
+
+    padding-top: 8px;
+
+    margin-top: 2px;
+
+    font-size: 10px;
+
+    color: var(--ink-dim);
+}
+
+.classification-bar strong {
+    color: var(--ink);
+
+    margin-left: 6px;
+}
+
+
+/* ANIMATIONS */
+
+@keyframes liveBlink {
+    0%,100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: .35;
+    }
+}
+
+    @media (max-width:1180px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .row-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+
+    <div class="sidebar">
+      <div class="brand">
+        <div class="mark">V</div>
+        <div class="name">VisionSort</div>
+      </div>
+      <div class="search">🔍 Search</div>
+      <div class="nav-label">MAIN</div>
+      <div class="nav-item active"><span class="ic">◆</span> Overview</div>
+      <div class="nav-item"><span class="ic">◇</span> Analytics</div>
+      <div class="nav-item"><span class="ic">◈</span> Objects <span class="nav-count" id="navObjCount">0</span></div>
+      <div class="nav-item"><span class="ic">▤</span> Sort Log</div>
+      <div class="nav-item"><span class="ic">✉</span> Alerts</div>
+      <div class="nav-label">TOOLS</div>
+      <div class="nav-item"><span class="ic">⚙</span> Settings</div>
+      <div class="nav-item"><span class="ic">?</span> FAQs</div>
+
+      <div class="sidebar-bottom">
+        <div class="plc-card">
+          <div class="card-title" style="font-size:12.5px; margin-bottom:8px;">Live I/O</div>
+          <div class="row"><span class="plc-dot" id="dot-ENTRY_SEN"></span> Entry sensor</div>
+          <div class="row"><span class="plc-dot" id="dot-CONV_MOTOR"></span> Conveyor motor</div>
+          <div class="row"><span class="plc-dot" id="dot-REJECT_SOL"></span> Reject pusher</div>
+          <div class="row"><span class="plc-dot" id="dot-VISION_FAULT_LAMP"></span> Vision fault</div>
+        </div>
+        <div class="profile-chip">
+          <div class="avatar">DP</div>
+          <div>
+            <div class="pname">Dhruv Patel</div>
+            <div class="prole">Robotics & Automation</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="topbar">
+        <div>
+          <div class="eyebrow">Dashboard Overview</div>
+          <h1>LID/BASE CLASSIFICATION</h1>
+        </div>
+        <div class="topbar-actions">
+          <div class="conn-pill" id="connPill"><span class="dot"></span><span id="connLabel">Checking PLC…</span></div>
+          <button class="btn-export">⬇ Export Log</button>
+        </div>
+      </div>
+
+      <div class="card balance-card">
+        <div class="card-top">
+          <div>
+            <div class="label">Total Objects Sorted</div>
+            <div class="big" id="bigTotal">0</div>
+            <div class="sub" id="totalSub">— live from classification_log.csv</div>
+          </div>
+        </div>
+        <div class="chart-wrap conveyor-scene">
+
+    <div class="scene-header">
+        <div>
+            <div class="scene-title">Live Sorting Line</div>
+            <div class="scene-status" id="lineStatus">
+                Sorting System Running
+            </div>
+        </div>
+
+        <div class="live-badge">
+            <span></span> LIVE
+        </div>
+    </div>
+
+    <div class="factory-floor">
+
+        <!-- ENTRY -->
+        <div class="entry-point">
+            <div class="station-name">FEED</div>
+            <div class="entry-sensor"></div>
+            <small>Sensor</small>
+        </div>
+
+        <!-- SORTING FLOOR: OBJECTS DROP INTO LID / BASE CONTAINERS -->
+        <div class="conveyor-system">
+
+            <div class="drop-zone" id="dropZone"></div>
+
+            <div class="containers-row">
+
+                <!-- LID CONTAINER -->
+                <div class="storage-container lid-container">
+                    <div class="container-label">LID</div>
+                    <div class="container-box" id="lidBox"></div>
+                    <div class="container-count" id="lidCount">0</div>
+                </div>
+
+                <!-- BASE CONTAINER -->
+                <div class="storage-container base-container">
+                    <div class="container-label">BASE</div>
+                    <div class="container-box" id="baseBox"></div>
+                    <div class="container-count" id="baseCount">0</div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="classification-bar">
+        <span>Vision classification</span>
+        <strong id="liveClassification">Waiting for object...</strong>
+    </div>
+
+</div>
+        <div class="sub-stats">
+          <div class="sub-stat">
+            <div class="head">✅ Passed Through</div>
+            <div class="amt" id="statPass">0</div>
+            <div class="delta-row"><span class="pill green" id="statPassPill">0%</span><span class="from">of
+                total</span></div>
+          </div>
+          <div class="sub-stat">
+            <div class="head">⛔ Diverted</div>
+            <div class="amt" id="statReject">0</div>
+            <div class="delta-row"><span class="pill red" id="statRejectPill">0%</span><span class="from">of
+                total</span></div>
+          </div>
+          <div class="sub-stat">
+            <div class="head">❔ Unrecognized</div>
+            <div class="amt" id="statUnknown">0</div>
+            <div class="delta-row"><span class="pill amber" id="statUnknownPill">0%</span><span class="from">of
+                total</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row-2">
+        <div class="score-card">
+          <div class="label">🎯 Sort Accuracy</div>
+          <div class="big" id="accuracyBig">0%</div>
+          <span class="pill green" id="accuracyPill">stable</span>
+        </div>
+        <div class="card table-card">
+          <div class="card-title">Recent Sorts</div>
+          <div class="card-subtitle">Live from the vision pipeline — updates every 2s</div>
+          <div class="thead-row"><span>Object</span><span>Time</span><span>Classification</span><span>Status</span>
+          </div>
+          <div class="tx-scroll">
+            <div id="txBody"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="right-col">
+      <div class="card ring-card">
+        <div class="head-row">
+          <div class="card-title" style="margin:0;">Pass Rate</div><span style="color:var(--ink-faint);">⋯</span>
+        </div>
+        <div class="ring-wrap">
+          <svg width="170" height="170" viewBox="0 0 170 170">
+            <circle cx="85" cy="85" r="72" fill="none" stroke="#f0eefc" stroke-width="14" />
+            <circle id="ringFg" cx="85" cy="85" r="72" fill="none" stroke="url(#ringGrad)" stroke-width="14"
+              stroke-linecap="round" stroke-dasharray="452" stroke-dashoffset="452" />
+            <defs>
+              <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#241454" />
+                <stop offset="100%" stop-color="#9b6bff" />
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="ring-pct" id="ringPct">0%</div>
+        </div>
+        <div class="ring-legend">
+          <div class="ring-legend-item"><span class="dot" style="background:#241454;"></span>Lid<span class="val"
+              id="legendLid">0</span></div>
+          <div class="ring-legend-item"><span class="dot" style="background:#9b6bff;"></span>Base<span class="val"
+              id="legendBase">0</span></div>
+          <div class="ring-legend-item"><span class="dot" style="background:#e7e2fb;"></span>Unknown<span class="val"
+              id="legendUnknown">0</span></div>
+        </div>
+      </div>
+
+      <div class="card expenses-card">
+        <div class="card-title" style="margin:0;">Class Distribution</div>
+        <div class="card-subtitle">&nbsp;</div>
+        <div class="bar" id="distBar"></div>
+        <div class="expenses-legend">
+          <div class="expenses-legend-item"><span class="dot" style="background:#241454;"></span>Lid <b
+              id="distLid">0%</b></div>
+          <div class="expenses-legend-item"><span class="dot" style="background:#9b6bff;"></span>Base <b
+              id="distBase">0%</b></div>
+          <div class="expenses-legend-item"><span class="dot" style="background:#e7e2fb;"></span>Unknown <b
+              id="distUnknown">0%</b></div>
+        </div>
+      </div>
+
+      <div class="ai-card">
+        <div class="arc"></div>
+        <div class="kicker">✨ Vision AI Insight</div>
+        <div class="headline" id="aiInsight">Gathering data from the sorting line…</div>
+        <button class="ai-btn"><span>View full classification log</span><span>→</span></button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let mainChartRef = null;
+    let lastAnimatedObject = null;
+    let lidCount = 0;
+    let baseCount = 0;
+
+    function animateObject(row) {
+
+    const dropZone =
+        document.getElementById('dropZone');
+
+    const floor =
+        document.querySelector('.conveyor-system');
+
+    const lidBox =
+        document.getElementById('lidBox');
+
+    const baseBox =
+        document.getElementById('baseBox');
+
+    const classificationDisplay =
+        document.getElementById('liveClassification');
+
+    if (!dropZone || !floor || !lidBox || !baseBox) return;
+
+
+    const classification =
+        (row.classification || 'UNKNOWN').toUpperCase();
+
+    const outcome =
+        row.outcome || 'unknown';
+
+
+    let type = 'unknown';
+
+    if (classification === 'LID') {
+        type = 'lid';
+    }
+
+    if (classification === 'BASE') {
+        type = 'base';
+    }
+
+
+    /* CREATE OBJECT */
+
+    const object =
+        document.createElement('div');
+
+    object.className =
+        `storage-object ${type}`;
+
+
+    const tag =
+        document.createElement('div');
+
+    tag.className = 'object-tag';
+
+    tag.textContent =
+        `#${row.object_id ?? ''} ${classification}`;
+
+    object.appendChild(tag);
+
+    dropZone.appendChild(object);
+
+
+    classificationDisplay.textContent =
+        `${classification}  •  ${
+            outcome === 'reject'
+                ? 'REJECT'
+                : outcome === 'pass'
+                    ? 'PASS'
+                    : 'UNKNOWN'
+        }`;
+
+
+    /* POSITIONS (relative to the sorting floor) */
+
+    const floorRect = floor.getBoundingClientRect();
+
+    const feedX = floorRect.width / 2 - 16;
+    const feedY = -40;
+
+    object.style.left = `${feedX}px`;
+    object.style.top = `${feedY}px`;
+    object.style.opacity = '1';
+
+
+    /* UNKNOWN OBJECTS: no container to drop into — fall through and fade */
+
+    const targetBox =
+        type === 'lid' ? lidBox :
+        type === 'base' ? baseBox :
+        null;
+
+    if (!targetBox) {
+
+        object.animate(
+            [
+                { top: `${feedY}px`, opacity: 1 },
+                { top: `70px`, opacity: 1 },
+                { top: `70px`, opacity: 0 }
+            ],
+            { duration: 1400, easing: 'ease-in', fill: 'forwards' }
+        ).finished.then(() => object.remove());
+
+        return;
+    }
+
+
+    const boxRect = targetBox.getBoundingClientRect();
+
+    const targetX =
+        (boxRect.left - floorRect.left) + boxRect.width / 2 - 16;
+
+    const containerTopY =
+        (boxRect.top - floorRect.top) + 10;
+
+    const midY = containerTopY - 55;
+
+
+    /* =====================================================
+       1. OBJECT FALLS FROM THE FEED POINT
+       ===================================================== */
+
+    object.animate(
+        [
+            { left: `${feedX}px`, top: `${feedY}px` },
+            { left: `${feedX}px`, top: `${midY}px` }
+        ],
+        { duration: 650, easing: 'ease-in', fill: 'forwards' }
+    ).finished.then(() => {
+
+        /* =================================================
+           2. SLIDES SIDEWAYS TO THE RIGHT CONTAINER
+           ================================================= */
+
+        return object.animate(
+            [
+                { left: `${feedX}px`, top: `${midY}px` },
+                { left: `${targetX}px`, top: `${midY}px` }
+            ],
+            { duration: 500, easing: 'ease-in-out', fill: 'forwards' }
+        ).finished;
+
+    }).then(() => {
+
+        /* =================================================
+           3. DROPS INTO THE CONTAINER WITH A LANDING BOUNCE
+           ================================================= */
+
+        targetBox.classList.add('receiving');
+
+        return object.animate(
+            [
+                { left: `${targetX}px`, top: `${midY}px`, transform: 'scale(1, 1)' },
+                { left: `${targetX}px`, top: `${containerTopY}px`, transform: 'scale(1, 1)' },
+                { left: `${targetX}px`, top: `${containerTopY + 5}px`, transform: 'scale(1.18, 0.82)' },
+                { left: `${targetX}px`, top: `${containerTopY}px`, transform: 'scale(1, 1)' }
+            ],
+            { duration: 480, easing: 'ease-out', fill: 'forwards' }
+        ).finished;
+
+    }).then(() => {
+
+        /* =================================================
+           4. SETTLES, FADES, AND UPDATES THE COUNTER
+           ================================================= */
+
+        targetBox.classList.remove('receiving');
+
+        if (type === 'lid') {
+            lidCount++;
+            document.getElementById('lidCount').textContent = lidCount;
+        } else {
+            baseCount++;
+            document.getElementById('baseCount').textContent = baseCount;
+        }
+
+        return object.animate(
+            [{ opacity: 1 }, { opacity: 0 }],
+            { duration: 260, easing: 'ease-in', fill: 'forwards' }
+        ).finished;
+
+    }).then(() => object.remove());
+}
+
+    async function pollPLC() {
+      try {
+        const res = await fetch('/api/plc_status');
+        const data = await res.json();
+        const pill = document.getElementById('connPill');
+        const label = document.getElementById('connLabel');
+        if (data.connected) {
+          pill.classList.add('on'); label.textContent = 'PLC Connected';
+          for (const [name, val] of Object.entries(data.tags)) {
+            const dot = document.getElementById('dot-' + name);
+            if (dot) dot.className = 'plc-dot' + (val ? (name === 'VISION_FAULT_LAMP' ? ' fault' : ' on') : '');
+          }
+        } else {
+          pill.classList.remove('on'); label.textContent = 'PLC Not Connected';
+        }
+      } catch (e) {
+        document.getElementById('connPill').classList.remove('on');
+        document.getElementById('connLabel').textContent = 'PLC Not Connected';
+      }
+    }
+
+    async function pollLog() {
+
+      try {
+
+        const res = await fetch('/api/log');
+        const data = await res.json();
+
+        // Animate newly detected object FIRST, independent of rendering —
+        // a failure in render() below must never block/skip the animation.
+        if (data.rows.length > 0) {
+
+          const latest = data.rows[data.rows.length - 1];
+
+          const latestId =
+            latest.object_id ??
+            latest.timestamp ??
+            JSON.stringify(latest);
+
+          if (latestId !== lastAnimatedObject) {
+
+            lastAnimatedObject = latestId;
+
+            try {
+              animateObject(latest);
+            } catch (animErr) {
+              console.error('animateObject failed', animErr);
+            }
+          }
+        }
+
+        try {
+          render(data.rows, data.summary);
+        } catch (renderErr) {
+          console.error('render failed', renderErr);
+        }
+
+      } catch (e) {
+
+        console.warn('log poll failed', e);
+
+      }
+    }
+
+    function render(rows, s) {
+      document.getElementById('bigTotal').textContent = s.total;
+      document.getElementById('totalSub').textContent = `${s.total} objects processed this session`;
+      document.getElementById('navObjCount').textContent = s.total;
+      document.getElementById('statPass').textContent = s.pass;
+      document.getElementById('statReject').textContent = s.reject;
+      document.getElementById('statUnknown').textContent = s.unknown;
+      document.getElementById('statPassPill').textContent = s.total ? Math.round(s.pass / s.total * 100) + '%' : '0%';
+      document.getElementById('statRejectPill').textContent = s.total ? Math.round(s.reject / s.total * 100) + '%' : '0%';
+      document.getElementById('statUnknownPill').textContent = s.total ? Math.round(s.unknown / s.total * 100) + '%' : '0%';
+
+      const accuracy = s.total ? Math.round(((s.pass + s.reject) / s.total) * 100) : 0;
+      document.getElementById('accuracyBig').textContent = accuracy + '%';
+
+      const passRate = s.pass_rate || 0;
+      document.getElementById('ringPct').textContent = passRate + '%';
+      const circumference = 452;
+      document.getElementById('ringFg').setAttribute('stroke-dashoffset', circumference - (circumference * passRate / 100));
+      document.getElementById('legendLid').textContent = s.lid;
+      document.getElementById('legendBase').textContent = s.base;
+      document.getElementById('legendUnknown').textContent = s.unknown;
+
+      const lidPct = s.total ? Math.round(s.lid / s.total * 100) : 0;
+      const basePct = s.total ? Math.round(s.base / s.total * 100) : 0;
+      const unkPct = Math.max(0, 100 - lidPct - basePct);
+      document.getElementById('distLid').textContent = lidPct + '%';
+      document.getElementById('distBase').textContent = basePct + '%';
+      document.getElementById('distUnknown').textContent = unkPct + '%';
+      document.getElementById('distBar').innerHTML = `
+    <div class="bar-seg" style="width:${lidPct}%; background:#241454;"></div>
+    <div class="bar-seg" style="width:${basePct}%; background:#9b6bff;"></div>
+    <div class="bar-seg" style="width:${unkPct}%; background:#e7e2fb;"></div>`;
+
+      // Rule-based "AI insight" text - swaps based on live data patterns
+      const insight = document.getElementById('aiInsight');
+      if (s.total === 0) {
+        insight.textContent = 'Waiting for objects to be sorted — insights will appear once data comes in.';
+      } else if (s.unknown / s.total > 0.15) {
+        insight.textContent = `Unrecognized rate is elevated (${Math.round(s.unknown / s.total * 100)}%) — consider re-tuning shape thresholds.`;
+      } else if (accuracy >= 90) {
+        insight.textContent = `Sorting accuracy is excellent at ${accuracy}%. No anomalies detected in the last ${s.total} objects.`;
+      } else {
+        insight.textContent = `Accuracy at ${accuracy}% — within normal range, but worth a spot check.`;
+      }
+
+      // Render the recent-sort log table and the trend chart independently —
+      // a failure in one (e.g. Chart.js unavailable) must never blank the other.
+      try {
+        renderTable(rows);
+      } catch (tableErr) {
+        console.error('renderTable failed', tableErr);
+      }
+
+      try {
+        renderChart(rows);
+      } catch (chartErr) {
+        console.error('renderChart failed', chartErr);
+      }
+    }
+
+    function renderChart(rows) {
+      const ctx = document.getElementById('mainChart');
+      const labels = rows.map((r, i) => r.object_id ?? i);
+      let running = 0;
+      const cumulative = rows.map(r => { running += (r.outcome === 'pass' ? 1 : 0.3); return running.toFixed(1); });
+
+      if (mainChartRef) mainChartRef.destroy();
+      const gradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 220);
+      gradient.addColorStop(0, 'rgba(109,59,245,.25)');
+      gradient.addColorStop(1, 'rgba(109,59,245,0)');
+
+      mainChartRef = new Chart(ctx, {
+        type: 'line',
+        data: { labels, datasets: [{ data: cumulative, borderColor: '#6d3bf5', backgroundColor: gradient, fill: true, tension: .35, pointRadius: 0, borderWidth: 2.5 }] },
+        options: { animation: { duration: 400 }, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } }
+      });
+    }
+
+    function renderTable(rows) {
+      const tbody = document.getElementById('txBody');
+      tbody.innerHTML = '';
+      const recent = rows.slice(-10).reverse();
+      if (!recent.length) { tbody.innerHTML = '<div class="tx-row"><span style="color:var(--ink-faint);">No records yet</span></div>'; return; }
+      recent.forEach(r => {
+        const row = document.createElement('div');
+        row.className = 'tx-row';
+        row.innerHTML = `
+      <span class="tx-obj">Object #${r.object_id ?? ''}</span>
+      <span style="color:var(--ink-dim);">${r.timestamp ? (r.timestamp.split(' ')[1] || r.timestamp) : ''}</span>
+      <span>${r.classification || ''}</span>
+      <span><span class="status-pill ${r.outcome}">${r.outcome === 'pass' ? 'Passed' : r.outcome === 'reject' ? 'Diverted' : 'Unknown'}</span></span>`;
+        tbody.appendChild(row);
+      });
+    }
+
+    function pollAll() { pollPLC(); pollLog(); }
+    pollAll();
+    setInterval(pollAll, 2000);
+  </script>
+</body>
+
+</html>

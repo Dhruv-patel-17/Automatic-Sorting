@@ -74,8 +74,8 @@ MIN_CONTOUR_AREA = 3000
 # frame so you can see exactly what it currently covers).
 ROI_TOP    = 0.10   # fraction from top of frame where the belt starts
 ROI_BOTTOM = 0.95   # fraction from top of frame where the belt ends
-ROI_LEFT   = 0.48   # fraction from left of frame where the belt starts
-ROI_RIGHT  = 0.72   # fraction from left of frame where the belt ends
+ROI_LEFT   = 0.45   # fraction from left of frame where the belt starts
+ROI_RIGHT  = 0.73   # fraction from left of frame where the belt ends
 
 SHOW_ROI_DEBUG = False   # set False once the crop region looks correct
 
