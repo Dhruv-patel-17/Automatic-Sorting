@@ -12,6 +12,7 @@
 
 <img width="800" alt="image" src="animation.gif">
 <img width="800" alt="image" src="sorting.gif">
+<img width="800" alt="image" src="SCADA.png">
 
 
 ## Introduction:
@@ -24,13 +25,13 @@ Traditional conveyor sorting relies on simple photoelectric sensors that can onl
 
 | Lid | Base |
 |---|---|
-| <img src="lid_template.png" width="260"> | <img src="base_template.png" width="260"> |
+| <img src="doc/lid_template.png" width="260"> | <img src="doc/base_template.png" width="260"> |
 | Simple rounded-square outline, nested concentric-ring surface pattern | Four L-shaped corner brackets with concave notches cut into the outline (a cross/bracket silhouette) |
 
 Both parts share the same color family and both have some rotational symmetry in their surface pattern — a combination that ruled out the two most obvious classification approaches.
 
 ## System Pipeline
-<img width="650" alt="image" src="doc/pipeline.png">
+<img width="650" alt="image" src="doc/workflow.png">
 
 ### 1. Image Capture
 The system captures live frames directly from the Factory I/O simulation window using the Windows `PrintWindow` API (via `pywin32`), rather than a physical camera or a virtual-camera bridge like OBS. This captures the window's rendered content directly from its own buffer, which avoids a real problem encountered early on: screen-region capture (via `mss`) grabbed raw screen pixels rather than window content, so when the output window overlapped the Factory I/O window on screen, the pipeline captured *itself*, producing a recursive video-feedback effect. `PrintWindow` reads the target window's content regardless of what else is on screen or on top of it.
