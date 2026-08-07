@@ -36,7 +36,7 @@ Both parts share the same color family and both have some rotational symmetry in
 ### 1. Image Capture
 The system captures live frames directly from the Factory I/O simulation window using the Windows `PrintWindow` API (via `pywin32`), rather than a physical camera or a virtual-camera bridge like OBS. This captures the window's rendered content directly from its own buffer, which avoids a real problem encountered early on: screen-region capture (via `mss`) grabbed raw screen pixels rather than window content, so when the output window overlapped the Factory I/O window on screen, the pipeline captured *itself*, producing a recursive video-feedback effect. `PrintWindow` reads the target window's content regardless of what else is on screen or on top of it.
 
-### 2. Object Detection (Contour-Based, not YOLO)
+### 2. Object Detection (Contour-Based)
 Each frame is cropped to a configurable region of interest (excluding background scenery and UI chrome), converted to grayscale, and processed with **Otsu adaptive thresholding** to separate objects from the belt background regardless of lighting. Contour detection then locates every object currently in frame.
 
 A pretrained YOLOv8 model was tested first and **discarded** for detection — it is trained on COCO's ~80 everyday object classes and produced zero detections on these synthetic, non-standard parts regardless of confidence threshold. Since the actual requirement was "find any object-shaped blob on the belt," not semantic recognition, direct contour detection is the correct and more reliable tool here.
