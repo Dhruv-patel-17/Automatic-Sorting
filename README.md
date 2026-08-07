@@ -12,7 +12,7 @@
 
 <img width="800" alt="image" src="animation.gif">
 <img width="800" alt="image" src="sorting.gif">
-<img width="800" alt="image" src="SCADA.png">
+<img width="800" alt="image" src="doc/SCADA.png">
 
 
 ## Introduction:
